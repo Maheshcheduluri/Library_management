@@ -1,0 +1,90 @@
+class Book:
+    def __init__(self, book_id, title, author, is_available=True):
+        self.book_id = book_id
+        self.title = title
+        self.author = author
+        self.is_available = is_available
+
+    def __str__(self):
+        return f"Book ID: {self.book_id}, Title: {self.title}, Author: {self.author}, Available: {self.is_available}"
+
+
+class Library:
+    def __init__(self):
+        self.books = []
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def display_books(self):
+        for book in self.books:
+            print(book)
+
+    def find_book_by_id(self, book_id):
+        for book in self.books:
+            if book.book_id == book_id:
+                return book
+        return None
+
+
+class Member:
+    def __init__(self, member_id, name):
+        self.member_id = member_id
+        self.name = name
+        self.borrowed_books = []
+
+    def borrow_book(self, book):
+        if book.is_available:
+            book.is_available = False
+            self.borrowed_books.append(book)
+            print(f"{self.name} borrowed '{book.title}'")
+        else:
+            print(f"Sorry, '{book.title}' is not available for borrowing.")
+
+    def return_book(self, book):
+        if book in self.borrowed_books:
+            book.is_available = True
+            self.borrowed_books.remove(book)
+            print(f"{self.name} returned '{book.title}'")
+        else:
+            print(f"You did not borrow '{book.title}' from the library.")
+
+    def display_borrowed_books(self):
+        if not self.borrowed_books:
+            print(f"{self.name} has not borrowed any books.")
+        else:
+            print(f"{self.name}'s borrowed books:")
+            for book in self.borrowed_books:
+                print(book)
+
+
+# Example Usage:
+book1 = Book(1, "The Catcher in the Rye", "J.D. Salinger")
+book2 = Book(2, "To Kill a Mockingbird", "Harper Lee")
+book3 = Book(3, "1984", "George Orwell")
+
+library = Library()
+library.add_book(book1)
+library.add_book(book2)
+library.add_book(book3)
+
+member1 = Member(101, "Alice")
+member2 = Member(102, "Bob")
+
+library.display_books()
+
+print("\n=== Borrowing and Returning Books ===")
+member1.borrow_book(book1)
+member1.borrow_book(book2)
+member2.borrow_book(book2)
+
+member1.display_borrowed_books()
+member2.display_borrowed_books()
+
+member1.return_book(book1)
+member2.return_book(book2)
+
+member1.display_borrowed_books()
+member2.display_borrowed_books()
+
+library.display_books()
